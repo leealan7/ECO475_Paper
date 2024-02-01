@@ -19,7 +19,7 @@ library(forecast) # functions: auto.arima, nnetar
 ```
 
 ```{r}
-df <- read.csv('covid_de.csv')
+df <- read.csv('../data/covid_de.csv')
 ```
 
 ```{r}
