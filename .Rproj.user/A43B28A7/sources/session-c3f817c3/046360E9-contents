@@ -4,7 +4,7 @@ title: "Getting Summary Stats"
 
 Install and load required R packages
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}!
 if (!require("quantmod")) install.packages("quantmod")
 if (!require("ggplot2")) install.packages("ggplot2")
 if (!require("stats")) install.packages("stats")
