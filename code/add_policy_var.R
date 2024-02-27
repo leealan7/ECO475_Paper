@@ -44,3 +44,8 @@ for(i in 0:nrow(df)){
   df$brake_applies[i] <- br
 }
 
+columns_to_drop <- c("over_lag_1", "over_lag_2", 'over_lag_3', 'over_lag_4', 'over_lag_5', 'over_lag_6', 'over_lag_7')
+
+df <- df %>% select(-columns_to_drop)
+
+write.csv(df, file = 'data/incidence_with_policy.csv', row.names = FALSE)
