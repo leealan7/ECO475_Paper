@@ -1,4 +1,6 @@
 library(rstanarm)
+library(stats)
+library(data.table)
 
 df <- read.csv('data/incidence.csv')
 
@@ -6,7 +8,7 @@ make_lags <- function(df) {
   df$over <- df$weekly_incidence >= 100
   
   for(i in 1:7){
-    df[, sprintf("over_lag_%d",i)] = lag(df$over, n=i)
+    df[, sprintf("over_lag_%d",i)] = shift(df$over, n=i)
   }
   
   return(df) 
