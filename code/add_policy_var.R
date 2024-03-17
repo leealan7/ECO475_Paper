@@ -2,10 +2,10 @@ library(rstanarm)
 library(stats)
 library(data.table)
 
-df <- read.csv('data/incidence.csv')
+df <- read.csv('data/incidence_daily.csv')
 
 make_lags <- function(df) {
-  df$over <- df$weekly_incidence >= 100
+  df$over <- df$weekly_inc >= 100
   
   for(i in 1:7){
     df[, sprintf("over_lag_%d",i)] = shift(df$over, n=i)
@@ -33,6 +33,8 @@ brake_applies <- function(df, i) {
   out_cond <- df$exit_condition[i]
   last_period_brake <- df$brake_applies[i-1]
   
+  
+  
   return(in_cond | (last_period_brake & (!out_cond)))
 }
 
@@ -50,4 +52,4 @@ columns_to_drop <- c("over_lag_1", "over_lag_2", 'over_lag_3', 'over_lag_4', 'ov
 
 df <- df %>% select(-columns_to_drop)
 
-write.csv(df, file = 'data/incidence_with_policy.csv', row.names = FALSE)
+write.csv(df, file = 'data/incidence_with_policy_new.csv', row.names = FALSE)
