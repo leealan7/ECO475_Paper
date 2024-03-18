@@ -74,7 +74,7 @@ estimates_ols_rd <- EventStudy(
   pre = 0,  post = 4
 )
 
-plt <- EventStudyPlot(estimates = estimates_ols_rd)
+plt <- EventStudyPlot(estimates = estimates_ols_nocon)
 plt
 
 df$log_cng <- log(df$inc_change)
