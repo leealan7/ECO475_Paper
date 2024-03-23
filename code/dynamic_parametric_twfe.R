@@ -4,6 +4,7 @@ library(dplyr)
 library(eventstudyr)
 library(stargazer)
 library(ggplot2)
+library(minpack.lm)
 
 df <- read.csv('data/incidence_with_policy_new.csv')
 
@@ -42,3 +43,28 @@ length(unique(df$bucket_day))
 
 length(unique(df$bucket_day_inc))
 
+
+exponential_model <- function(intercept, brake){
+  
+}
+
+
+#model <- nls(percent_change ~ ,
+#             start = list(c = 0, a=1, b=-1),
+#             algorithm = "port",
+#             data=df,
+#             control=nls.control(maxiter = 20))
+#
+#summary(model)
+
+
+make_model <- function(degree){
+  return(lm(percent_change ~ factor(id) + factor(days)*poly(weekly_inc, degree) + brake_applies, data=df))
+}
+
+models <- lapply(1:4, make_model)
+
+
+stargazer(models, type='latex', keep='brake_applies', omit.stat = c('f', 'ser'),
+          add.lines = list(c('Degree of Interaction Polynonial', 1, 2, 3, 4),
+                           c('unit FEs', 'Yes', 'Yes', 'Yes', 'Yes')))

@@ -38,7 +38,7 @@ for (day_of_week in unique(df$day)){
   df[, day_of_week] <- as.numeric(df$day==day_of_week)
 }
 
-twfe_mod = plm(percent_change ~ brake_applies + factor(day), data=df, model="within", effect = "twoways")
+twfe_mod = plm(percent_change ~ brake_applies + factor(days), data=df, model="within", effect = "twoways")
 summary(twfe_mod)
 
 
