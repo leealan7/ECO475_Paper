@@ -1,5 +1,7 @@
 library(dplyr)
 
+df = read.csv('data/incidence_with_policy_new.csv')
+
 in_out_in <- function(df, county_id) {
   cdf <- filter(df, id == county_id)
   in_brake <- FALSE
@@ -22,5 +24,4 @@ for(id in unique(df$id)){
   if(in_out_in(df, id)){
     print(id)
   }
-  else{print(FALSE)}
 }

@@ -45,6 +45,8 @@ get_reg_for_lag(df, df$change_10_in_future)
 
 selected_columns <- c("change_3_in_past", "change_2_in_past")
 
+df$brake_applies <- as.numeric(df$brake_applies)
+
 # Use lapply on selected columns
 result <- lapply(df[selected_columns], function(col) {
   # Your function logic here

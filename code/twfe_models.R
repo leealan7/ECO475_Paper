@@ -15,7 +15,13 @@ df <- filter(df, as.Date('2021/04/01') <= df$date & df$date <= as.Date('2021/07/
 
 df$days <- as.numeric(difftime(df$date, as.Date('2020/01/01')))
 
+df$brake_applies <- as.numeric(df$brake_applies)
+
 df$first_day_of_brake <- 0
+
+df$day <- weekdays(as.Date(df$date))
+
+
 
 add_brake_applies_date <- function(county_id){
   first_day <- filter(df, id==county_id & brake_applies) %>%
@@ -28,26 +34,14 @@ for (county in unique(df$id)){
   df$first_day_of_brake[df$id==county] <- add_brake_applies_date(county)
 }
 
-twfe_mod = plm(percent_change ~ brake_applies, data=df, model="within", effect = "twoways")
+for (day_of_week in unique(df$day)){
+  df[, day_of_week] <- as.numeric(df$day==day_of_week)
+}
+
+twfe_mod = plm(percent_change ~ brake_applies + factor(day), data=df, model="within", effect = "twoways")
 summary(twfe_mod)
 
-results <- ES(long_data=df,
-              outcomevar="percent_change",
-              unit_var="id",
-              cal_time_var='days',
-              onset_time_var='first_day_of_brake',
-              cluster_vars='id')
 
-
-out <- att_gt(yname = 'percent_change',
-              gname='first_day_of_brake',
-              idname='id',
-              tname='days',
-              xformla=~1,
-              data = df,
-              est_method='reg')
-
-es <- aggte(out, type='dynamic')
 
 estimates_ols_rd <- EventStudy(
   estimator = "OLS",
@@ -56,8 +50,10 @@ estimates_ols_rd <- EventStudy(
   policyvar = "brake_applies",
   idvar = "id",
   timevar = "days",
-  pre = 0,  post = 4
+  pre = 1,  post = 7,
+  controls = "Monday + Tuesday"
 )
 
 
 plt <- EventStudyPlot(estimates = estimates_ols_rd)
+plt
